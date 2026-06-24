@@ -1,0 +1,808 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Grand Chase Classic — Guia BiS</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&family=Inter:wght@400;500;600&display=swap');
+
+  :root {
+    --bg:        #0d0f14;
+    --surface:   #13171f;
+    --panel:     #191e29;
+    --border:    #2a3045;
+    --gold:      #c9a84c;
+    --gold-dim:  #7a6030;
+    --teal:      #3ecfb2;
+    --red:       #e05c5c;
+    --text:      #d4d8e2;
+    --muted:     #7a8099;
+    --white:     #f0f2f8;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+
+  /* ── HEADER ── */
+  header {
+    background: linear-gradient(135deg, #0a0c11 0%, #151c2e 60%, #0d1118 100%);
+    border-bottom: 2px solid var(--gold-dim);
+    padding: 36px 24px 28px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  header::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse 60% 80% at 50% -10%, rgba(201,168,76,0.13) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  header .eyebrow {
+    font-family: 'Inter', sans-serif;
+    font-size: 11px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 10px;
+  }
+  header h1 {
+    font-family: 'Cinzel', serif;
+    font-size: clamp(22px, 5vw, 40px);
+    font-weight: 900;
+    color: var(--white);
+    letter-spacing: 1px;
+    line-height: 1.15;
+  }
+  header h1 span { color: var(--gold); }
+  header p.sub {
+    margin-top: 10px;
+    color: var(--muted);
+    font-size: 13px;
+  }
+
+  /* ── TABS ── */
+  .tabs {
+    display: flex;
+    gap: 4px;
+    padding: 20px 20px 0;
+    border-bottom: 2px solid var(--border);
+    overflow-x: auto;
+  }
+  .tab-btn {
+    background: none;
+    border: none;
+    border-bottom: 3px solid transparent;
+    padding: 8px 18px;
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--muted);
+    cursor: pointer;
+    white-space: nowrap;
+    transition: color .2s, border-color .2s;
+    margin-bottom: -2px;
+  }
+  .tab-btn:hover { color: var(--text); }
+  .tab-btn.active { color: var(--gold); border-bottom-color: var(--gold); }
+
+  /* ── CONTENT ── */
+  .content { padding: 24px 20px; max-width: 960px; margin: 0 auto; }
+  .tab-panel { display: none; }
+  .tab-panel.active { display: block; }
+
+  /* ── SECTION ── */
+  .section { margin-bottom: 32px; }
+  .section-title {
+    font-family: 'Cinzel', serif;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--gold);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    border-left: 3px solid var(--gold);
+    padding-left: 10px;
+    margin-bottom: 14px;
+  }
+
+  /* ── TABLE ── */
+  .tbl-wrap { overflow-x: auto; border-radius: 8px; border: 1px solid var(--border); }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    background: var(--surface);
+  }
+  thead tr { background: var(--panel); }
+  th {
+    padding: 10px 14px;
+    font-size: 11px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--muted);
+    text-align: left;
+    white-space: nowrap;
+  }
+  td {
+    padding: 9px 14px;
+    border-top: 1px solid var(--border);
+    vertical-align: middle;
+  }
+  tr:hover td { background: rgba(201,168,76,.04); }
+
+  /* row accents */
+  .slot { color: var(--white); font-weight: 600; white-space: nowrap; }
+  .stat { color: var(--teal); }
+  .card-name { color: var(--gold); font-weight: 500; }
+  .loc { color: var(--muted); font-size: 13px; }
+  .badge {
+    display: inline-block;
+    font-size: 11px;
+    padding: 2px 7px;
+    border-radius: 4px;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+  .badge-atk  { background: rgba(224,92,92,.18); color: #e07575; }
+  .badge-satk { background: rgba(62,207,178,.15); color: var(--teal); }
+  .badge-crit { background: rgba(201,168,76,.18); color: var(--gold); }
+  .badge-taint{ background: rgba(160,100,220,.18); color: #c07de0; }
+
+  /* ── GRID CARDS ── */
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 12px; }
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 14px 16px;
+  }
+  .card .c-slot { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; }
+  .card .c-val  { font-size: 15px; font-weight: 600; color: var(--white); margin-top: 4px; }
+  .card .c-best { font-size: 12px; color: var(--gold); margin-top: 2px; }
+  .card .c-good { font-size: 12px; color: var(--teal); margin-top: 2px; }
+
+  /* ── INFO BOXES ── */
+  .info-box {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--gold);
+    border-radius: 6px;
+    padding: 14px 16px;
+    margin-bottom: 10px;
+  }
+  .info-box .ib-title { font-weight: 600; color: var(--white); margin-bottom: 4px; }
+  .info-box .ib-sub   { color: var(--muted); font-size: 13px; }
+  .info-box .ib-note  { margin-top: 6px; font-size: 12px; color: var(--gold); }
+  .info-box.teal  { border-left-color: var(--teal); }
+  .info-box.teal .ib-note { color: var(--teal); }
+  .info-box.red   { border-left-color: var(--red); }
+
+  /* ── COORDI TABLE ── */
+  .coordi-note { font-size: 12px; color: var(--muted); margin-bottom: 10px; }
+  .coordi-note strong { color: var(--teal); }
+
+  /* ── RUNE TABLE ── */
+  .rune-shape {
+    display: inline-block;
+    width: 10px; height: 10px;
+    margin-right: 6px;
+    border-radius: 2px;
+    vertical-align: middle;
+  }
+  .r-circle  { border-radius: 50%; background: #5ba0e0; }
+  .r-tri     { width:0; height:0; border-left:6px solid transparent; border-right:6px solid transparent; border-bottom:10px solid #e0a45b; background: none; }
+  .r-quad    { background: #5be0a4; }
+  .r-penta   { background: var(--gold); }
+  .r-hexa    { background: #c07de0; }
+
+  /* ── TITLE TABLE ── */
+  .main-badge {
+    background: rgba(201,168,76,.25);
+    color: var(--gold);
+    font-size: 11px;
+    padding: 1px 6px;
+    border-radius: 4px;
+    font-weight: 600;
+  }
+  .stack-badge {
+    background: rgba(62,207,178,.15);
+    color: var(--teal);
+    font-size: 11px;
+    padding: 1px 6px;
+    border-radius: 4px;
+  }
+
+  footer {
+    text-align: center;
+    padding: 24px;
+    color: var(--muted);
+    font-size: 12px;
+    border-top: 1px solid var(--border);
+    margin-top: 8px;
+  }
+
+  @media(max-width:520px) {
+    .grid { grid-template-columns: 1fr 1fr; }
+    td, th { padding: 7px 10px; font-size: 12px; }
+  }
+
+  /* ── LOGIN SCREEN ── */
+  #login-screen {
+    position: fixed; inset: 0; z-index: 9999;
+    background: linear-gradient(135deg, #0a0c11 0%, #151c2e 60%, #0d1118 100%);
+    display: flex; align-items: center; justify-content: center;
+  }
+  #login-screen::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: radial-gradient(ellipse 60% 80% at 50% 30%, rgba(201,168,76,0.10) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .login-box {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-top: 3px solid var(--gold);
+    border-radius: 12px;
+    padding: 40px 36px;
+    width: 100%; max-width: 360px;
+    position: relative; z-index: 1;
+    box-shadow: 0 24px 60px rgba(0,0,0,0.5);
+  }
+  .login-box .lb-logo {
+    font-family: 'Cinzel', serif;
+    font-size: 20px; font-weight: 900;
+    color: var(--white); text-align: center;
+    margin-bottom: 4px;
+  }
+  .login-box .lb-logo span { color: var(--gold); }
+  .login-box .lb-sub {
+    text-align: center; font-size: 12px;
+    color: var(--muted); margin-bottom: 28px;
+  }
+  .login-box label {
+    display: block; font-size: 11px; font-weight: 600;
+    letter-spacing: 1px; text-transform: uppercase;
+    color: var(--muted); margin-bottom: 6px;
+  }
+  .login-box input {
+    width: 100%; padding: 10px 14px;
+    background: var(--panel); border: 1px solid var(--border);
+    border-radius: 6px; color: var(--white);
+    font-family: 'Inter', sans-serif; font-size: 14px;
+    outline: none; transition: border-color .2s;
+    margin-bottom: 16px;
+  }
+  .login-box input:focus { border-color: var(--gold); }
+  .login-box .lb-btn {
+    width: 100%; padding: 11px;
+    background: linear-gradient(135deg, #b8922a, #c9a84c);
+    border: none; border-radius: 6px;
+    color: #0d0f14; font-family: 'Inter', sans-serif;
+    font-size: 14px; font-weight: 700;
+    cursor: pointer; transition: opacity .2s;
+    margin-top: 4px;
+  }
+  .login-box .lb-btn:hover { opacity: .88; }
+  .login-box .lb-err {
+    background: rgba(224,92,92,.15);
+    border: 1px solid rgba(224,92,92,.3);
+    border-radius: 6px; padding: 8px 12px;
+    color: #e07575; font-size: 12px;
+    margin-bottom: 14px; display: none;
+  }
+  .login-box .lb-err.show { display: block; }
+</style>
+</head>
+<body>
+
+<!-- ══════════════ LOGIN ══════════════ -->
+<div id="login-screen">
+  <div class="login-box">
+    <div class="lb-logo">Grand Chase <span>Classic</span></div>
+    <div class="lb-sub">Guia exclusivo · Guilda Piece화 — apenas membros</div>
+
+    <label for="inp-nome">Seu nick no jogo</label>
+    <input type="text" id="inp-nome" placeholder="Ex: Hansel" autocomplete="off" onkeydown="if(event.key==='Enter') doLogin()">
+
+    <label for="inp-senha">Senha da guilda</label>
+    <input type="password" id="inp-senha" placeholder="••••••••" onkeydown="if(event.key==='Enter') doLogin()">
+
+    <div class="lb-err" id="login-err">❌ Nick não encontrado ou senha incorreta.</div>
+
+    <button class="lb-btn" onclick="doLogin()">⚔️ Entrar</button>
+  </div>
+</div>
+
+<header>
+  <div class="eyebrow">Guia Oficial da Guilda · Piece화</div>
+  <h1>Grand Chase <span>Classic</span></h1>
+  <h1 style="font-size:clamp(14px,3vw,22px); font-weight:700; margin-top:4px; color:var(--gold);">Melhor Equipamento (BiS) — Cheat Sheet</h1>
+  <p class="sub">Guia exclusivo para os membros da <strong style="color:var(--gold)">Piece화</strong> — bons estudos e boas hunts! ⚔️</p>
+</header>
+
+<div class="tabs">
+  <button class="tab-btn active" onclick="switchTab('cartas')">🃏 Cartas</button>
+  <button class="tab-btn" onclick="switchTab('coordi')">👘 SR's</button>
+  <button class="tab-btn" onclick="switchTab('props')">⬡ Adereços (Void)</button>
+  <button class="tab-btn" onclick="switchTab('despertar')">✨ Despertar & Runas</button>
+  <button class="tab-btn" onclick="switchTab('titulos')">🏅 Títulos</button>
+  <button class="tab-btn" onclick="switchTab('opcional')">📋 Pontos de Chase LVL</button>
+</div>
+
+<!-- ══════════════ CARTAS ══════════════ -->
+<div class="content">
+<div id="tab-cartas" class="tab-panel active">
+
+  <div class="section">
+    <div class="section-title">Melhor Carta por Slot (BiS)</div>
+    <div class="tbl-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Slot</th>
+            <th>Efeito da Carta</th>
+            <th>Atributo</th>
+            <th>Nome da Carta</th>
+            <th>Onde Conseguir</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="slot">Capacete</td>
+            <td><span class="badge badge-atk">Ataque</span> <span style="color:var(--muted); font-size:12px">(ou maior Taint)</span></td>
+            <td class="stat">100 ATQ / 0,55% Resist. Taint</td>
+            <td class="card-name">Cartas de Solene</td>
+            <td class="loc">Masmorras de Solene</td>
+          </tr>
+          <tr>
+            <td class="slot">Armadura Superior</td>
+            <td><span class="badge badge-atk">Ataque</span></td>
+            <td class="stat">555 ATQ</td>
+            <td class="card-name">Duell (IV)</td>
+            <td class="loc">Claustro Infinito 4</td>
+          </tr>
+          <tr>
+            <td class="slot">Armadura Inferior</td>
+            <td><span class="badge badge-satk">Ataque Especial</span></td>
+            <td class="stat">785 ATQ ESP / 0,52% Resist. Taint</td>
+            <td class="card-name">Bruxa Caótica</td>
+            <td class="loc">Grande Explosão de Kounat</td>
+          </tr>
+          <tr>
+            <td class="slot">Luvas</td>
+            <td><span class="badge badge-crit">Dano Crítico</span></td>
+            <td class="stat">31,5% Dano Crítico / 530 ATQ ESP</td>
+            <td class="card-name">Morte (Grim Reaper)</td>
+            <td class="loc">Caminho Abissal / Loja</td>
+          </tr>
+          <tr>
+            <td class="slot">Sapatos</td>
+            <td><span class="badge badge-satk">Ataque Especial</span></td>
+            <td class="stat">785 ATQ ESP / 0,52% Resist. Taint</td>
+            <td class="card-name">Bruxa Caótica</td>
+            <td class="loc">Grande Explosão de Kounat</td>
+          </tr>
+          <tr>
+            <td class="slot">Manto</td>
+            <td><span class="badge badge-atk">Ataque</span></td>
+            <td class="stat">555 ATQ</td>
+            <td class="card-name">Duell (IV)</td>
+            <td class="loc">Claustro Infinito 4</td>
+          </tr>
+          <tr>
+            <td class="slot">Arma</td>
+            <td><span class="badge badge-crit">Dano Crítico</span></td>
+            <td class="stat">31,5% Dano Crítico / 530 ATQ ESP</td>
+            <td class="card-name">Morte (Grim Reaper)</td>
+            <td class="loc">Caminho Abissal / Loja</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Cartas Alternativas — Arma / Luvas (Dano Crítico)</div>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Atributo</th><th>Nome</th><th>Onde Conseguir</th></tr></thead>
+        <tbody>
+          <tr><td class="stat">31,5% Dano Crítico</td><td class="card-name">São Gaian Corrompido</td><td class="loc">Templo do Tempo</td></tr>
+          <tr><td class="stat">31,5% Dano Crítico / 0,43% Taint</td><td class="card-name">Desafiante do Void</td><td class="loc">Passe Chaser</td></tr>
+          <tr><td class="stat">28,75% Dano Crítico / 0,67% Taint</td><td class="card-name">Surtrark das Chamas</td><td class="loc">Santuário da Besta Divina</td></tr>
+          <tr><td class="stat">28% Dano Crítico / 0,78% Taint</td><td class="card-name">Dominador Abissal</td><td class="loc">Abissal / Baú Abissal</td></tr>
+          <tr><td class="stat">27% Dano Crítico / 0,6% Taint</td><td class="card-name">Devorador Void 3</td><td class="loc">Invasão Void</td></tr>
+          <tr><td class="stat">26,5% Dano Crítico / 0,4% Taint</td><td class="card-name">Guerreiro Gon Desconhecido</td><td class="loc">Rainha Gorgos</td></tr>
+          <tr><td class="stat">26,39% Dano Crítico</td><td class="card-name">Berkas</td><td class="loc">Covil de Berkas</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Cartas Alternativas — Armadura Sup. / Manto (Ataque)</div>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Atributo</th><th>Nome</th><th>Onde Conseguir</th></tr></thead>
+        <tbody>
+          <tr><td class="stat">515 ATQ / 0,52% Taint</td><td class="card-name">Astaroth o Criador</td><td class="loc">Grande Explosão de Kounat</td></tr>
+          <tr><td class="stat">515 ATQ / 0,47% Taint</td><td class="card-name">Vingador Void</td><td class="loc">Passe Chaser</td></tr>
+          <tr><td class="stat">510 ATQ / 0,67% Taint</td><td class="card-name">Trevas Encarnadas</td><td class="loc">Capela da Eternidade</td></tr>
+          <tr><td class="stat">510 ATQ / 0,67% Taint</td><td class="card-name">O Esquecido</td><td class="loc">Caminho Envolto em Trevas</td></tr>
+          <tr><td class="stat">507 ATQ</td><td class="card-name">Guardião do Templo</td><td class="loc">Templo do Tempo</td></tr>
+          <tr><td class="stat">475 ATQ / 0,4% Taint</td><td class="card-name">Resoluto da Tempestade</td><td class="loc">Chaser Dimensional</td></tr>
+          <tr><td class="stat">475 ATQ / 0,4% Taint</td><td class="card-name">Lunar Chaser</td><td class="loc">Passe Chaser</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Cartas Alternativas — Armadura Inf. / Sapatos (ATQ Especial)</div>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Atributo</th><th>Nome</th><th>Onde Conseguir</th></tr></thead>
+        <tbody>
+          <tr><td class="stat">774 ATQ ESP</td><td class="card-name">Astaroth</td><td class="loc">Colapso de Kounat</td></tr>
+          <tr><td class="stat">772 ATQ ESP / 0,96% Taint</td><td class="card-name">Searetone</td><td class="loc">Incubatório do Renascimento</td></tr>
+          <tr><td class="stat">772 ATQ ESP / 0,87% Taint</td><td class="card-name">Void Chaser</td><td class="loc">Passe Chaser</td></tr>
+          <tr><td class="stat">765 ATQ ESP / 0,6% Taint</td><td class="card-name">Observador Void</td><td class="loc">Void Taint</td></tr>
+          <tr><td class="stat">765 ATQ ESP</td><td class="card-name">Quoronnos</td><td class="loc">Zeruel</td></tr>
+          <tr><td class="stat">760 ATQ ESP / 0,40% Taint</td><td class="card-name">Sistema de Controle do Trono</td><td class="loc">Trono da Deusa</td></tr>
+          <tr><td class="stat">760 ATQ ESP / 0,40% Taint</td><td class="card-name">Solar Chaser</td><td class="loc">Passe Chaser</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</div>
+
+<!-- ══════════════ COORDI ══════════════ -->
+<div id="tab-coordi" class="tab-panel">
+  <div class="section">
+    <div class="section-title">SR's por Slot</div>
+    <p class="coordi-note">Use <strong>Chance Crítica</strong> até atingir 120%+ → a partir daí troque pelo de <strong>Dano Crítico</strong></p>
+    <div class="tbl-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Slot</th>
+            <th>Chance Crítica</th>
+            <th>Dano Crítico (melhor acima de 120%)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td class="slot">Capacete</td><td>Temporada 5 / 10</td><td>Passe Chaser Temp. 8</td></tr>
+          <tr><td class="slot">Armadura Superior</td><td>Temporada 9</td><td>Temporada 7</td></tr>
+          <tr><td class="slot">Armadura Inferior</td><td>Temporada 8</td><td>Temporada 5</td></tr>
+          <tr><td class="slot">Luvas</td><td>Temporada 8</td><td>Temporada 8</td></tr>
+          <tr><td class="slot">Sapatos</td><td>Temporada 9</td><td>Temporada 8</td></tr>
+          <tr><td class="slot">Manto</td><td>Temporada 8</td><td>Temporada 10</td></tr>
+          <tr><td class="slot">Arma</td><td>Temporada 7</td><td>Temporada 9</td></tr>
+          <tr><td class="slot">Cabeça Superior</td><td>Temporada 8</td><td>Temporada 9</td></tr>
+          <tr><td class="slot">Cabeça Inferior</td><td>Temporada 9</td><td>Temporada 10</td></tr>
+          <tr><td class="slot">Ornamento Superior</td><td>Temporada 9</td><td>Temporada 9</td></tr>
+          <tr><td class="slot">Ornamento Inferior</td><td>Temporada 6</td><td>Passe Chaser Temp. 9</td></tr>
+          <tr><td class="slot">Braço</td><td>Temporada 5 / 10</td><td>Temporada 8</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════ PROPS ══════════════ -->
+<div id="tab-props" class="tab-panel">
+  <div class="section">
+    <div class="section-title">Adereços Void — Bom vs Melhor</div>
+    <div class="grid">
+      <div class="card">
+        <div class="c-slot">Capacete</div>
+        <div class="c-best">⭐ MELHOR: 600 Ataque</div>
+        <div class="c-good">✅ BOM: 300 Ataque</div>
+      </div>
+      <div class="card">
+        <div class="c-slot">Armadura Superior</div>
+        <div class="c-best">⭐ MELHOR: 800 Ataque Especial</div>
+        <div class="c-good">✅ BOM: 400 Ataque Especial</div>
+      </div>
+      <div class="card">
+        <div class="c-slot">Armadura Inferior</div>
+        <div class="c-best">⭐ MELHOR: 10% Recup. MP</div>
+        <div class="c-good">✅ BOM: 7% Recup. MP</div>
+      </div>
+      <div class="card">
+        <div class="c-slot">Luvas</div>
+        <div class="c-best">⭐ MELHOR: Recup. MP do Pet 7%/10%</div>
+        <div class="c-good">✅ BOM: ATQ ao HP Crítico 10%/20%</div>
+      </div>
+      <div class="card">
+        <div class="c-slot">Sapatos</div>
+        <div class="c-best">⭐ MELHOR: 800 Ataque Especial</div>
+        <div class="c-good">✅ BOM: 400 Ataque Especial</div>
+      </div>
+      <div class="card">
+        <div class="c-slot">Manto</div>
+        <div class="c-best">⭐ MELHOR: 600 Ataque</div>
+        <div class="c-good">✅ BOM: 300 Ataque</div>
+      </div>
+      <div class="card">
+        <div class="c-slot">Arma</div>
+        <div class="c-best">⭐ MELHOR: 10% Dano Crítico</div>
+        <div class="c-good">✅ BOM: 7% Dano Crítico</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════ DESPERTAR & RUNAS ══════════════ -->
+<div id="tab-despertar" class="tab-panel">
+
+  <div class="section">
+    <div class="section-title">Stats de Despertar</div>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Tipo</th><th>Atributo</th><th>Observação</th></tr></thead>
+        <tbody>
+          <tr>
+            <td class="slot">Criação</td>
+            <td class="stat">Ataque Especial / Ataque</td>
+            <td class="loc">Escolha o maior</td>
+          </tr>
+          <tr>
+            <td class="slot">Destruição</td>
+            <td class="stat">Dano Crítico / Ataque Pelas Costas</td>
+            <td class="loc">Prefira Dano Crítico</td>
+          </tr>
+          <tr>
+            <td class="slot">Harmonia</td>
+            <td class="stat">Dano a Chefes</td>
+            <td class="loc">4º Jin/Zero, Todo Dano de Habilidade (Ai)</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Runas de Habilidade</div>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Runa</th><th>Habilidades</th><th>Exceções</th></tr></thead>
+        <tbody>
+          <tr>
+            <td class="slot">Dano da 3ª Habilidade</td>
+            <td>Habilidades mais usadas</td>
+            <td class="loc">4º Jin/Zero, 1ª Rin (transformação), 2ª Lire Ai Decanee (chefe grande)</td>
+          </tr>
+          <tr>
+            <td class="slot">Custo MP/AP da 3ª Hab.</td>
+            <td>Habilidades mais usadas</td>
+            <td class="loc">Mesmas exceções acima</td>
+          </tr>
+          <tr>
+            <td class="slot">Cooldown da 3ª Hab.</td>
+            <td>Habilidades mais usadas</td>
+            <td class="loc">Mesmas exceções acima</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Runas de Atributo</div>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Runa</th><th>Atributo Principal</th><th>Secundários (por prioridade)</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><span class="rune-shape r-circle"></span><span class="slot">Círculo</span></td>
+            <td class="stat">Ataque</td>
+            <td class="loc">Dano Crítico → ATQ ESP → Chance Crítica</td>
+          </tr>
+          <tr>
+            <td><span class="rune-shape r-tri"></span><span class="slot">Triângulo</span></td>
+            <td class="stat">Ataque (ou ATQ ESP se maior)</td>
+            <td class="loc">Dano Crítico → ATQ ESP → Chance Crítica</td>
+          </tr>
+          <tr>
+            <td><span class="rune-shape r-quad"></span><span class="slot">Quadrado</span></td>
+            <td class="stat">Ataque</td>
+            <td class="loc">Dano Crítico → ATQ ESP → Chance Crítica</td>
+          </tr>
+          <tr>
+            <td><span class="rune-shape r-penta"></span><span class="slot">Penta</span></td>
+            <td class="stat">Dano Crítico</td>
+            <td class="loc">Ataque → ATQ ESP → Chance Crítica</td>
+          </tr>
+          <tr>
+            <td><span class="rune-shape r-hexa"></span><span class="slot">Hexa</span></td>
+            <td class="stat" style="color:var(--taint, #c07de0)">Taint (não é prioridade, mas é o melhor)</td>
+            <td class="loc">Dano Crítico → Ataque → ATQ ESP</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Set de Runas</div>
+    <div class="info-box">
+      <div class="ib-title">⭐ Melhor opção — 4× Fúria (Fury)</div>
+      <div class="ib-sub">2× Fury = +5% Ataque &nbsp;|&nbsp; 4× Fury = +10% Ataque</div>
+    </div>
+    <div class="info-box teal">
+      <div class="ib-title">Alternativa — 2× Luta (Fight)</div>
+      <div class="ib-sub">+2,5% Ataque por stack (em grupo) → máximo 5% ATQ no grupo</div>
+    </div>
+    <div class="info-box" style="border-left-color:var(--muted)">
+      <div class="ib-title">Opcional — 3× Doom</div>
+      <div class="ib-sub">+18,8% Dano Crítico — Fury é melhor, mas serve como alternativa</div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ══════════════ TÍTULOS ══════════════ -->
+<div id="tab-titulos" class="tab-panel">
+  <div class="section">
+    <div class="section-title">Títulos BiS</div>
+    <div class="tbl-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Título</th>
+            <th>Efeito</th>
+            <th>Onde Obter</th>
+            <th>Uso</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="slot">(Verdadeiro) Origem do Caos</td>
+            <td class="stat">Chance Crítica / Dano Crítico / Ataque Pelas Costas / Taint</td>
+            <td class="loc">Invasão Void 1 (drop ou loja)</td>
+            <td><span class="main-badge">Título Principal</span></td>
+          </tr>
+          <tr>
+            <td class="slot">Conquistador de Harrier</td>
+            <td class="stat">Chance Crítica / Exp / Taint<br><span style="color:var(--gold)">+ 10% de Dano em equipe</span></td>
+            <td class="loc">Núcleo de Harrier Renak (Mundo Harrier)</td>
+            <td><span class="stack-badge">1 por grupo (acumula com Bearer)</span></td>
+          </tr>
+          <tr>
+            <td class="slot">Portador da Coragem Tenaz</td>
+            <td class="stat">Chance Crítica / Dano Crítico / Taint<br><span style="color:var(--gold)">+ 5% de Dano em equipe</span></td>
+            <td class="loc">Incubatório do Renascimento (Mundo Harrier)</td>
+            <td><span class="stack-badge">1 por grupo (acumula com Harrier)</span></td>
+          </tr>
+          <tr>
+            <td class="slot">Qualquer Título de EXP</td>
+            <td class="stat">+15% de Experiência</td>
+            <td class="loc">Múltiplos locais</td>
+            <td class="loc">Farm até WL30</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div style="margin-top:16px">
+      <div class="info-box teal">
+        <div class="ib-title">💡 Dica de Títulos de Grupo</div>
+        <div class="ib-sub">Os títulos Conquistador de Harrier (+10%) e Portador da Coragem Tenaz (+5%) <strong>se acumulam</strong> quando usados por membros diferentes do grupo. Ou seja: 1 person usa cada um = +15% de dano total para o grupo!</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Títulos Alternativos (Opcionais)</div>
+    <div class="tbl-wrap">
+      <table>
+        <thead>
+          <tr><th>Título</th><th>Efeito</th><th>Onde Obter</th><th>Acumula com</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="slot">Sobreviveu ao Julgamento</td>
+            <td class="stat">Chance Crítica + 5% Dano em Equipe</td>
+            <td class="loc">Terra do Julgamento</td>
+            <td class="loc">Harrier / Feeding Frenzy</td>
+          </tr>
+          <tr>
+            <td class="slot">Condutor do Submundo</td>
+            <td class="stat">Chance Crítica + 5% Dano em Equipe</td>
+            <td class="loc">Trem Monstro 301</td>
+            <td class="loc">Harrier / Feeding Frenzy</td>
+          </tr>
+          <tr>
+            <td class="slot">Feeding Frenzy</td>
+            <td class="stat">Chance Crítica + 5% Dano em Equipe</td>
+            <td class="loc">Pets Famintos</td>
+            <td class="loc">Renak / Sobreviveu / Condutor</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════ OPCIONAL ══════════════ -->
+<div id="tab-opcional" class="tab-panel">
+
+  <div class="section">
+    <div class="section-title">🔵 Pontos Chase LVL — Chars de MP</div>
+    <div class="info-box teal" style="margin-bottom:14px">
+      <div class="ib-title">Ordem de distribuição de pontos para personagens que usam MP</div>
+      <div class="ib-sub">Siga a ordem abaixo para maximizar o desempenho do seu char MP.</div>
+    </div>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>#</th><th>Atributo</th><th>Observação</th></tr></thead>
+        <tbody>
+          <tr><td class="slot">1</td><td class="stat">Red. do Custo de MP(AP) de Hab. +0.2%</td><td class="loc">—</td></tr>
+          <tr><td class="slot">2</td><td class="stat">Dano de Todas as Habilidades +0.2%</td><td class="loc">—</td></tr>
+          <tr><td class="slot">3</td><td class="stat">Dano ao Atacar/Ser Atacado +0.15%</td><td class="loc">—</td></tr>
+          <tr><td class="slot">4</td><td class="stat">Dano Causado a Chefes +0.25%</td><td class="loc">—</td></tr>
+          <tr><td class="slot">5</td><td class="stat">Red. do Tempo de Espera de Hab. 0.2%</td><td class="loc">—</td></tr>
+          <tr><td class="slot">6</td><td class="stat">Ataque +10</td><td class="loc">—</td></tr>
+          <tr><td class="slot">7</td><td class="stat">Resistência a Contaminação +0.07%</td><td class="loc">—</td></tr>
+          <tr><td class="slot">8</td><td class="stat">MP no Início +0.6</td><td class="loc">—</td></tr>
+          <tr><td class="slot">9</td><td class="stat">Redução de Dano de Chefes +0.4%</td><td class="loc">—</td></tr>
+          <tr><td class="slot">10</td><td class="stat">Ganho adicional de EXP +1%</td><td class="loc">—</td></tr>
+          <tr><td class="slot">11</td><td class="stat">Aumento de HP Máx. +0.5%</td><td class="loc">—</td></tr>
+          <tr><td class="slot">12</td><td class="stat">Defesa +6</td><td class="loc">—</td></tr>
+          <tr><td class="slot">13</td><td class="stat">Ganho Adicional de GP +1%</td><td class="loc">—</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">🟣 Pontos Chase LVL — Chars de AP</div>
+    <div class="info-box" style="border-left-color:#c07de0; margin-bottom:14px">
+      <div class="ib-title">Ordem de distribuição de pontos para personagens que usam AP</div>
+      <div class="ib-sub">Siga a ordem abaixo para maximizar o desempenho do seu char AP.</div>
+    </div>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>#</th><th>Atributo</th><th>Observação</th></tr></thead>
+        <tbody>
+          <tr><td class="slot">1</td><td class="stat">— edite aqui —</td><td class="loc">—</td></tr>
+          <tr><td class="slot">2</td><td class="stat">— edite aqui —</td><td class="loc">—</td></tr>
+          <tr><td class="slot">3</td><td class="stat">— edite aqui —</td><td class="loc">—</td></tr>
+          <tr><td class="slot">4</td><td class="stat">— edite aqui —</td><td class="loc">—</td></tr>
+          <tr><td class="slot">5</td><td class="stat">— edite aqui —</td><td class="loc">—</td></tr>
+          <tr><td class="slot">6</td><td class="stat">— edite aqui —</td><td class="loc">—</td></tr>
+          <tr><td class="slot">7</td><td class="stat">— edite aqui —</td><td class="loc">—</td></tr>
+          <tr><td class="slot">8</td><td class="stat">— edite aqui —</td><td class="loc">—</td></tr>
+          <tr><td class="slot">9</td><td class="stat">— edite aqui —</td><td class="loc">—</td></tr>
+          <tr><td class="slot">10</td><td class="stat">— edite aqui —</td><td class="loc">—</td></tr>
+          <tr><td class="slot">11</td><td class="stat">— edite aqui —</td><td class="loc">—</td></tr>
+          <tr><td class="slot">12</td><td class="stat">— edite aqui —</td><td class="loc">—</td></tr>
+          <tr><td class="slot">13</td><td class="stat">— edite aqui —</td><td class="loc">—</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</div>
+</div><!-- /content -->
+
+<footer>
+  Grand Chase Classic · Guia BiS da Guilda <strong style="color:var(--gold)">Piece화</strong> · Baseado na Cheat Sheet original em inglês
+</footer>
+
+<script>
+(function(){const _DATA=[{"n":"ZnJvdHo=","s":"Z3VpbGRhcGllY2U="},{"n":"aWthdGlh","s":"Z3VpbGRhcGllY2U="},{"n":"a3VtYQ==","s":"Z3VpbGRhcGllY2U="},{"n":"TWFmaWFhYm0=","s":"Z3VpbGRhcGllY2U="},{"n":"RXRoZXJuaW5n","s":"Z3VpbGRhcGllY2U="},{"n":"S2lkb2thd2E=","s":"Z3VpbGRhcGllY2U="}];function _чk(_i,_p){return _DATA.some(_e=>atob(_e.n).toLowerCase()===_i.toLowerCase()&&atob(_e.s)===_p)}window['doLogin']=function(){const _n=document.getElementById('inp-nome').value.trim();const _p=document.getElementById('inp-senha').value.trim();const _e=document.getElementById('login-err');if(!_чk(_n,_p)){_e.classList.add('show');return;}_e.classList.remove('show');const _s=document.getElementById('login-screen');_s.style.transition='opacity .4s';_s.style.opacity='0';setTimeout(()=>_s.style.display='none',400);};window['switchTab']=function(_id){document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));document.getElementById('tab-'+_id).classList.add('active');event.currentTarget.classList.add('active');};})();
+</script>
+</body>
+</html>

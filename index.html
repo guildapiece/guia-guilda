@@ -758,10 +758,62 @@
 
   .tut-empty { text-align: center; color: var(--muted); font-size: 13px; padding: 40px 0; }
 
+  /* ══ TOOLTIP PREVIEW (Cartas & Títulos) ══ */
+  .has-preview { position: relative; cursor: pointer; }
+  .has-preview::after {
+    content: ' 🔍';
+    font-size: 10px;
+    opacity: .5;
+    vertical-align: middle;
+  }
+  .preview-tooltip {
+    position: fixed;
+    z-index: 9000;
+    background: var(--surface);
+    border: 1px solid var(--gold-dim);
+    border-radius: 10px;
+    box-shadow: 0 12px 40px rgba(0,0,0,.7);
+    padding: 10px;
+    pointer-events: none;
+    opacity: 0;
+    transform: scale(.94) translateY(6px);
+    transition: opacity .15s, transform .15s;
+    max-width: 220px;
+    text-align: center;
+  }
+  .preview-tooltip.show {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+  .preview-tooltip img {
+    width: 200px;
+    border-radius: 6px;
+    display: block;
+  }
+  .preview-tooltip .pt-name {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--gold);
+    margin-top: 8px;
+    line-height: 1.3;
+  }
+  .preview-tooltip .pt-noimg {
+    width: 200px; height: 120px;
+    background: var(--panel);
+    border-radius: 6px;
+    display: flex; align-items: center; justify-content: center;
+    color: var(--muted); font-size: 12px;
+  }
   /* end responsive */
 </style>
 </head>
 <body>
+
+<!-- Tooltip global de preview -->
+<div class="preview-tooltip" id="preview-tooltip">
+  <div id="pt-media"></div>
+  <div class="pt-name" id="pt-name"></div>
+</div>
 
 <!-- ══ LOGIN ══ -->
 <div id="login-screen">
@@ -840,49 +892,49 @@
             <td class="slot">Elmo</td>
             <td><span class="badge badge-atk">Ataque</span> <span style="color:var(--muted); font-size:12px">(ou maior resist. Contaminação)</span></td>
             <td class="stat">100 ATQ / 0,55% Resist. Contaminação</td>
-            <td class="card-name">Cartas de Solene</td>
+            <td class="card-name has-preview" data-img="carta_solene.png" data-name="Cartas de Solene">Cartas de Solene</td>
             <td class="loc">Masmorras de Solene</td>
           </tr>
           <tr>
             <td class="slot">Cota</td>
             <td><span class="badge badge-atk">Ataque</span></td>
             <td class="stat">555 ATQ</td>
-            <td class="card-name">Claustro Infinito - Duel (IV)</td>
+            <td class="card-name has-preview" data-img="carta_claustro.png" data-name="Claustro Infinito - Duel (IV)">Claustro Infinito - Duel (IV)</td>
             <td class="loc">Claustro Infinito 4</td>
           </tr>
           <tr>
             <td class="slot">Calça</td>
             <td><span class="badge badge-satk">Ataque Especial</span></td>
             <td class="stat">785 ATQ ESP / 0,52% Resist. Contaminação</td>
-            <td class="card-name">Bruxa do Caos</td>
+            <td class="card-name has-preview" data-img="carta_bruxa.png" data-name="Bruxa do Caos">Bruxa do Caos</td>
             <td class="loc">A Grande Explosão de Calnat / Loja</td>
           </tr>
           <tr>
             <td class="slot">Luva</td>
             <td><span class="badge badge-crit">Dano Crítico</span></td>
             <td class="stat">31,5% Dano Crítico / 530 ATQ ESP</td>
-            <td class="card-name">Coletor de Morte (Grim Reaper)</td>
+            <td class="card-name has-preview" data-img="carta_grimreaper.png" data-name="Coletor de Morte (Grim Reaper)">Coletor de Morte (Grim Reaper)</td>
             <td class="loc">Caminho Abissal / Loja</td>
           </tr>
           <tr>
             <td class="slot">Sapato</td>
             <td><span class="badge badge-satk">Ataque Especial</span></td>
             <td class="stat">785 ATQ ESP / 0,52% Resist. Contaminação</td>
-            <td class="card-name">Bruxa do Caos</td>
+            <td class="card-name has-preview" data-img="carta_bruxa.png" data-name="Bruxa do Caos">Bruxa do Caos</td>
             <td class="loc">A Grande Explosão de Calnat / Loja</td>
           </tr>
           <tr>
             <td class="slot">Capa</td>
             <td><span class="badge badge-atk">Ataque</span></td>
             <td class="stat">555 ATQ</td>
-            <td class="card-name">Claustro Infinito - Duel (IV)</td>
+            <td class="card-name has-preview" data-img="carta_claustro.png" data-name="Claustro Infinito - Duel (IV)">Claustro Infinito - Duel (IV)</td>
             <td class="loc">Claustro Infinito 4</td>
           </tr>
           <tr>
             <td class="slot">Arma</td>
             <td><span class="badge badge-crit">Dano Crítico</span></td>
             <td class="stat">31,5% Dano Crítico / 530 ATQ ESP</td>
-            <td class="card-name">Coletor de Morte (Grim Reaper)</td>
+            <td class="card-name has-preview" data-img="carta_grimreaper.png" data-name="Coletor de Morte (Grim Reaper)">Coletor de Morte (Grim Reaper)</td>
             <td class="loc">Caminho Abissal / Loja</td>
           </tr>
         </tbody>
@@ -896,13 +948,13 @@
       <table>
         <thead><tr><th>Atributo</th><th>Nome</th><th>Onde Conseguir</th></tr></thead>
         <tbody>
-          <tr><td class="stat">31,5% Dano Crítico</td><td class="card-name">A Divindade Corrompida Gaian</td><td class="loc">Templo do Tempo / Loja</td></tr>
-          <tr><td class="stat">31,5% Dano Crítico / 0,43% Resist. Contaminação</td><td class="card-name">Desafiador do Vazio</td><td class="loc">Passe Chaser</td></tr>
-          <tr><td class="stat">28,75% Dano Crítico / 0,67% Resist. Contaminação</td><td class="card-name">Surtrark das Chamas</td><td class="loc">Santuário da Besta Divina</td></tr>
-          <tr><td class="stat">28% Dano Crítico / 0,78% Resist. Contaminação</td><td class="card-name">Dominador Abissal</td><td class="loc">Abissal / Baú Abissal</td></tr>
-          <tr><td class="stat">27% Dano Crítico / 0,60% Resist. Contaminação</td><td class="card-name">Devorador Vazio 3</td><td class="loc">Vazio (Invasão)</td></tr>
-          <tr><td class="stat">26,5% Dano Crítico / 0,40% Resist. Contaminação</td><td class="card-name">Guerreiro Gon Desconhecido</td><td class="loc">Rainha Gorgos</td></tr>
-          <tr><td class="stat">26,39% Dano Crítico</td><td class="card-name">Berkas</td><td class="loc">Covil de Berkas</td></tr>
+          <tr><td class="stat">31,5% Dano Crítico</td><td class="card-name has-preview" data-img="carta_gaian.png" data-name="A Divindade Corrompida Gaian">A Divindade Corrompida Gaian</td><td class="loc">Templo do Tempo / Loja</td></tr>
+          <tr><td class="stat">31,5% Dano Crítico / 0,43% Resist. Contaminação</td><td class="card-name has-preview" data-img="carta_desafiador.png" data-name="Desafiador do Vazio">Desafiador do Vazio</td><td class="loc">Passe Chaser</td></tr>
+          <tr><td class="stat">28,75% Dano Crítico / 0,67% Resist. Contaminação</td><td class="card-name has-preview" data-img="carta_surtrark.png" data-name="Surtrark das Chamas">Surtrark das Chamas</td><td class="loc">Santuário da Besta Divina</td></tr>
+          <tr><td class="stat">28% Dano Crítico / 0,78% Resist. Contaminação</td><td class="card-name has-preview" data-img="carta_dominador.png" data-name="Dominador Abissal">Dominador Abissal</td><td class="loc">Abissal / Baú Abissal</td></tr>
+          <tr><td class="stat">27% Dano Crítico / 0,60% Resist. Contaminação</td><td class="card-name has-preview" data-img="carta_devorador.png" data-name="Devorador Vazio 3">Devorador Vazio 3</td><td class="loc">Vazio (Invasão)</td></tr>
+          <tr><td class="stat">26,5% Dano Crítico / 0,40% Resist. Contaminação</td><td class="card-name has-preview" data-img="carta_gon.png" data-name="Guerreiro Gon Desconhecido">Guerreiro Gon Desconhecido</td><td class="loc">Rainha Gorgos</td></tr>
+          <tr><td class="stat">26,39% Dano Crítico</td><td class="card-name has-preview" data-img="carta_berkas.png" data-name="Berkas">Berkas</td><td class="loc">Covil de Berkas</td></tr>
         </tbody>
       </table>
     </div>
@@ -914,13 +966,13 @@
       <table>
         <thead><tr><th>Atributo</th><th>Nome</th><th>Onde Conseguir</th></tr></thead>
         <tbody>
-          <tr><td class="stat">515 ATQ / 0,52% Resist. Contaminação</td><td class="card-name">Astaroth, o Criador</td><td class="loc">A Grande Explosão de Calnat</td></tr>
-          <tr><td class="stat">515 ATQ / 0,47% Resist. Contaminação</td><td class="card-name">Vingador do Vazio</td><td class="loc">Passe Chaser</td></tr>
-          <tr><td class="stat">510 ATQ / 0,67% Resist. Contaminação</td><td class="card-name">Trevas Encarnadas</td><td class="loc">Capela da Eternidade</td></tr>
-          <tr><td class="stat">510 ATQ / 0,67% Resist. Contaminação</td><td class="card-name">O Esquecido</td><td class="loc">Trilha Obscurecida</td></tr>
-          <tr><td class="stat">507 ATQ</td><td class="card-name">Guardião do Templo</td><td class="loc">Templo do Tempo</td></tr>
-          <tr><td class="stat">475 ATQ / 0,40% Resist. Contaminação</td><td class="card-name">Lua Chaser</td><td class="loc">Passe Chaser</td></tr>
-          <tr><td class="stat">440 ATQ / 0,52% Resist. Contaminação</td><td class="card-name">Trevas Invencíveis</td><td class="loc">Capela da Eternidade</td></tr>
+          <tr><td class="stat">515 ATQ / 0,52% Resist. Contaminação</td><td class="card-name has-preview" data-img="carta_astaroth.png" data-name="Astaroth, o Criador">Astaroth, o Criador</td><td class="loc">A Grande Explosão de Calnat</td></tr>
+          <tr><td class="stat">515 ATQ / 0,47% Resist. Contaminação</td><td class="card-name has-preview" data-img="carta_vingador.png" data-name="Vingador do Vazio">Vingador do Vazio</td><td class="loc">Passe Chaser</td></tr>
+          <tr><td class="stat">510 ATQ / 0,67% Resist. Contaminação</td><td class="card-name has-preview" data-img="carta_trevas_enc.png" data-name="Trevas Encarnadas">Trevas Encarnadas</td><td class="loc">Capela da Eternidade</td></tr>
+          <tr><td class="stat">510 ATQ / 0,67% Resist. Contaminação</td><td class="card-name has-preview" data-img="carta_esquecido.png" data-name="O Esquecido">O Esquecido</td><td class="loc">Trilha Obscurecida</td></tr>
+          <tr><td class="stat">507 ATQ</td><td class="card-name has-preview" data-img="carta_guardiao.png" data-name="Guardião do Templo">Guardião do Templo</td><td class="loc">Templo do Tempo</td></tr>
+          <tr><td class="stat">475 ATQ / 0,40% Resist. Contaminação</td><td class="card-name has-preview" data-img="carta_lua.png" data-name="Lua Chaser">Lua Chaser</td><td class="loc">Passe Chaser</td></tr>
+          <tr><td class="stat">455 ATQ / 0,97% Resist. Contaminação</td><td class="card-name has-preview" data-img="carta_renak.png" data-name="Renak">Renak</td><td class="loc">Núcleo de Renak Harrier</td></tr>
         </tbody>
       </table>
     </div>
@@ -932,12 +984,12 @@
       <table>
         <thead><tr><th>Atributo</th><th>Nome</th><th>Onde Conseguir</th></tr></thead>
         <tbody>
-          <tr><td class="stat">772 ATQ ESP / 0,96% Resist. Contaminação</td><td class="card-name">Seareton</td><td class="loc">Incubadora da Ressurreição</td></tr>
-          <tr><td class="stat">772 ATQ ESP / 0,87% Resist. Contaminação</td><td class="card-name">Perseguidor do Vazio</td><td class="loc">Passe Chaser</td></tr>
-          <tr><td class="stat">765 ATQ ESP / 0,6% Resist. Contaminação</td><td class="card-name">Observador do Vazio</td><td class="loc">Void (Contaminação)</td></tr>
-          <tr><td class="stat">765 ATQ ESP</td><td class="card-name">Chromos</td><td class="loc">Karuel</td></tr>
-          <tr><td class="stat">760 ATQ ESP / 0,40% Resist. Contaminação</td><td class="card-name">Sol Chaser</td><td class="loc">Passe Chaser</td></tr>
-          <tr><td class="stat">742 ATQ ESP / 0,67% Resist. Contaminação</td><td class="card-name">General Supremo Sentinela</td><td class="loc">Salão da Harmonia</td></tr>
+          <tr><td class="stat">772 ATQ ESP / 0,96% Resist. Contaminação</td><td class="card-name has-preview" data-img="carta_seareton.png" data-name="Seareton">Seareton</td><td class="loc">Incubadora da Ressurreição</td></tr>
+          <tr><td class="stat">772 ATQ ESP / 0,87% Resist. Contaminação</td><td class="card-name has-preview" data-img="carta_perseguidor.png" data-name="Perseguidor do Vazio">Perseguidor do Vazio</td><td class="loc">Passe Chaser</td></tr>
+          <tr><td class="stat">765 ATQ ESP / 0,6% Resist. Contaminação</td><td class="card-name has-preview" data-img="carta_observador.png" data-name="Observador do Vazio">Observador do Vazio</td><td class="loc">Void (Contaminação)</td></tr>
+          <tr><td class="stat">765 ATQ ESP</td><td class="card-name has-preview" data-img="carta_chromos.png" data-name="Chromos">Chromos</td><td class="loc">Karuel</td></tr>
+          <tr><td class="stat">760 ATQ ESP / 0,40% Resist. Contaminação</td><td class="card-name has-preview" data-img="carta_sol.png" data-name="Sol Chaser">Sol Chaser</td><td class="loc">Passe Chaser</td></tr>
+          <tr><td class="stat">742 ATQ ESP / 0,67% Resist. Contaminação</td><td class="card-name has-preview" data-img="carta_general.png" data-name="General Supremo Sentinela">General Supremo Sentinela</td><td class="loc">Salão da Harmonia</td></tr>
         </tbody>
       </table>
     </div>
@@ -1147,25 +1199,25 @@
         </thead>
         <tbody>
           <tr>
-            <td class="slot">(Verdadeiro) Origem do Caos</td>
+            <td class="slot has-preview" data-img="titulo_origem.png" data-name="(Verdadeiro) Origem do Caos">(Verdadeiro) Origem do Caos</td>
             <td class="stat">Chance Crítica / Dano Crítico / Ataque Pelas Costas / Resist. Contaminação</td>
             <td class="loc">Invasão Void 1 (drop ou loja)</td>
             <td><span class="main-badge">Título Principal</span></td>
           </tr>
           <tr>
-            <td class="slot">Conquistador do Continente Harrier (Renak)</td>
+            <td class="slot has-preview" data-img="titulo_harrier.png" data-name="Conquistador do Continente Harrier (Renak)">Conquistador do Continente Harrier (Renak)</td>
             <td class="stat">Chance Crítica / Exp / Resist. Contaminação<br><span style="color:var(--gold)">+ 10% de Dano em equipe</span></td>
             <td class="loc">Núcleo de Renak Harrier</td>
             <td><span class="stack-badge">1 por grupo (acumula com Incubadora)</span></td>
           </tr>
           <tr>
-            <td class="slot">Portador da Enorme Coragem (Incubadora)</td>
+            <td class="slot has-preview" data-img="titulo_coragem.png" data-name="Portador da Enorme Coragem (Incubadora)">Portador da Enorme Coragem (Incubadora)</td>
             <td class="stat">Chance Crítica / Dano Crítico / Resist. Contaminação<br><span style="color:var(--gold)">+ 5% de Dano em equipe</span></td>
             <td class="loc">Incubadora da Ressurreição</td>
             <td><span class="stack-badge">1 por grupo (acumula com Renak)</span></td>
           </tr>
           <tr>
-            <td class="slot">Qualquer Título de EXP</td>
+            <td class="slot has-preview" data-img="" data-name="Qualquer Título de EXP">Qualquer Título de EXP</td>
             <td class="stat">+15% de Experiência</td>
             <td class="loc">Desfiladeira de Rá ou Império de Astaroth</td>
             <td class="loc">Farm WL/Torre das Ilusões</td>
@@ -1190,19 +1242,19 @@
         </thead>
         <tbody>
           <tr>
-            <td class="slot">A Rebelião das Mascotes</td>
+            <td class="slot has-preview" data-img="titulo_mascotes.png" data-name="A Rebelião das Mascotes">A Rebelião das Mascotes</td>
             <td class="stat">Velocidade aumentada + 10% Dano em Equipe</td>
             <td class="loc">Rebelião das Mascotes</td>
             <td class="loc">Incubadora / Maquinista Infernal</td>
           </tr>
           <tr>
-            <td class="slot">Maquinista Infernal</td>
+            <td class="slot has-preview" data-img="titulo_maquinista.png" data-name="Maquinista Infernal">Maquinista Infernal</td>
             <td class="stat">Chance Crítica + 5% Dano em Equipe</td>
             <td class="loc">Expresso de Hades 301</td>
             <td class="loc">Harrier / A Rebelião das Mascotes</td>
           </tr>
           <tr>
-            <td class="slot">O dia do julgamento</td>
+            <td class="slot has-preview" data-img="titulo_julgamento.png" data-name="O dia do julgamento">O dia do julgamento</td>
             <td class="stat">Chance Crítica + 5% Dano em Equipe</td>
             <td class="loc">Terra do Julgamento</td>
             <td class="loc">Renak / A Rebelião das Mascotes</td>
@@ -1859,6 +1911,70 @@
   window['toggleTut'] = function(i) {
     document.getElementById('tutcard-'+i).classList.toggle('open');
   };
+
+  /* ══ TOOLTIP PREVIEW ══ */
+  (function(){
+    const tip  = document.getElementById('preview-tooltip');
+    const med  = document.getElementById('pt-media');
+    const nm   = document.getElementById('pt-name');
+    let   current = null;
+
+    function show(el, x, y) {
+      const img  = el.dataset.img;
+      const name = el.dataset.name || el.textContent.trim();
+      nm.textContent = name;
+      if (img) {
+        med.innerHTML = `<img src="${img}" alt="${name}" onerror="this.parentElement.innerHTML='<div class=pt-noimg>Imagem não encontrada</div>'">`;
+      } else {
+        med.innerHTML = `<div class="pt-noimg">📄 ${name}</div>`;
+      }
+      // Position tooltip
+      const tw = 224, th = 260;
+      let lx = x + 16, ly = y - 20;
+      if (lx + tw > window.innerWidth  - 12) lx = x - tw - 12;
+      if (ly + th > window.innerHeight - 12) ly = window.innerHeight - th - 12;
+      if (ly < 8) ly = 8;
+      tip.style.left = lx + 'px';
+      tip.style.top  = ly + 'px';
+      tip.classList.add('show');
+      current = el;
+    }
+
+    function hide() {
+      tip.classList.remove('show');
+      current = null;
+    }
+
+    // Desktop: hover
+    document.addEventListener('mouseover', e => {
+      const el = e.target.closest('.has-preview');
+      if (el) show(el, e.clientX, e.clientY);
+    });
+    document.addEventListener('mousemove', e => {
+      if (current) {
+        const tw = 224, th = 260;
+        let lx = e.clientX + 16, ly = e.clientY - 20;
+        if (lx + tw > window.innerWidth  - 12) lx = e.clientX - tw - 12;
+        if (ly + th > window.innerHeight - 12) ly = window.innerHeight - th - 12;
+        if (ly < 8) ly = 8;
+        tip.style.left = lx + 'px';
+        tip.style.top  = ly + 'px';
+      }
+    });
+    document.addEventListener('mouseout', e => {
+      if (!e.target.closest('.has-preview')) return;
+      hide();
+    });
+
+    // Mobile: tap toggle
+    document.addEventListener('click', e => {
+      const el = e.target.closest('.has-preview');
+      if (!el) { hide(); return; }
+      if (current === el) { hide(); return; }
+      const r = el.getBoundingClientRect();
+      show(el, r.left + r.width/2, r.top);
+    });
+  })();
 
   document.addEventListener('DOMContentLoaded', () => { buildCharList(); renderTuts(); });
 })();
